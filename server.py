@@ -1,4 +1,6 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import signal
+import threading
 
 class HelloHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -18,8 +20,36 @@ class HelloHandler(BaseHTTPRequestHandler):
         </html>
         '''
         self.wfile.write(html.encode())
+    
+    # Suppress log messages for cleaner output (optional)
+    def log_message(self, format, *args):
+        return  # Silent mode
+
+def shutdown_handler(signum, frame):
+    print('\nShutting down server gracefully...')
+    sys.exit(0)
 
 if __name__ == '__main__':
     server = HTTPServer(('localhost', 8000), HelloHandler)
     print('Server running on http://localhost:8000')
-    server.serve_forever()
+    print('Press Ctrl+C to stop the server')
+    
+    # Run server in a separate thread
+    server_thread = threading.Thread(target=server.serve_forever)
+    server_thread.daemon = True
+    server_thread.start()
+    
+    def shutdown_server(signum, frame):
+        print('\nShutting down server gracefully...')
+        server.shutdown()
+        server.server_close()
+        print('Server stopped.')
+        exit(0)
+    
+    signal.signal(signal.SIGINT, shutdown_server)
+    
+    # Keep main thread alive
+    try:
+        server_thread.join()
+    except KeyboardInterrupt:
+        shutdown_server(None, None)
