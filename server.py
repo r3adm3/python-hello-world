@@ -15,7 +15,7 @@ class HelloHandler(BaseHTTPRequestHandler):
         </head>
         <body>
             <h1>Hello World!</h1>
-            <p>This is a simple Python web server.</p>
+            <p>This is a simple Python web server. this should change later</p>
         </body>
         </html>
         '''

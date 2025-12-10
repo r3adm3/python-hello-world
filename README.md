@@ -1,6 +1,6 @@
 # Simple Python Web Server
 
-A minimal HTTP server built with Python's standard library that serves a "Hello World" HTML page.
+A minimal HTTP server built with Python's standard library that serves a "Hello World" HTML page. (demo to show sync to github)
 
 ## Description
 
